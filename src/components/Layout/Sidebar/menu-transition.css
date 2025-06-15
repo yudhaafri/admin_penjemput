@@ -1,0 +1,22 @@
+.menu-collapse-enter {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.menu-collapse-enter-active {
+  max-height: 500px; /* Adjust as needed */
+  opacity: 1;
+  transition: max-height 200ms ease-in, opacity 200ms ease-in;
+}
+
+.menu-collapse-exit {
+  max-height: 500px; /* Same as active */
+  opacity: 1;
+}
+
+.menu-collapse-exit-active {
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 200ms ease-out, opacity 200ms ease-out;
+}
