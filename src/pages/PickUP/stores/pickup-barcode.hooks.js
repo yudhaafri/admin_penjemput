@@ -33,6 +33,7 @@ const usePickupBarcodeHooks = () => {
   };
   return {
     barcode,
+    setBarcode,
     handleSearch,
   };
 };

@@ -1,9 +1,36 @@
 import { Input } from "src/components";
 import BarcodeScannerImg from "/assets/barcode-scanner.png";
 import usePickupBarcodeHooks from "../stores/pickup-barcode.hooks";
+import { qrMutation } from "src/hooks/services/usePickup";
+import { useEffect, useState } from "react";
+import PickupModal from "./PickupModal";
 
 const BarcodeSection = () => {
-  const { barcode, handleSearch } = usePickupBarcodeHooks();
+  const { barcode, setBarcode, handleSearch } = usePickupBarcodeHooks();
+  const [modalData, setModalData] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const getQR = qrMutation();
+  useEffect(() => {
+    if (barcode) {
+      let array = barcode?.split("/");
+      let qrCode = array[array?.length - 1];
+      getQR.mutate(qrCode, {
+        onSuccess: (response) => {
+          setModalData(response?.data);
+          setShowModal(true);
+
+          // Sembunyikan modal setelah beberapa detik (misal 3 detik)
+          setTimeout(() => {
+            setShowModal(false);
+            setBarcode("");
+          }, 3000);
+        },
+        onError: () => {
+          setBarcode("");
+        },
+      });
+    }
+  }, [barcode]);
   return (
     <>
       <div className="relative">
@@ -17,11 +44,13 @@ const BarcodeSection = () => {
         />
       </div>
       <Input
-        placeholder={"ID Card"}
+        placeholder={"QR Code"}
         onChange={handleSearch}
-        value={barcode}
+        // disabled
+        value={barcode ?? ""}
         className="w-[535px] border-2 border-[#314F84]"
       />
+      <PickupModal data={modalData} isOpen={showModal} />
     </>
   );
 };

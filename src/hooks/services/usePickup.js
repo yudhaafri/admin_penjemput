@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { PICKUP } from "src/services";
 
 export const usePickupQuery = (keys, options) => {
@@ -10,4 +10,8 @@ export const usePickupQuery = (keys, options) => {
     },
     ...options,
   });
+};
+
+export const qrMutation = () => {
+  return useMutation(async (qrCode) => await PICKUP.getQR(qrCode));
 };

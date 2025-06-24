@@ -4,3 +4,9 @@
   background-repeat: no-repeat;
   background-size: cover;
 }
+
+.bg-modal-pickup {
+  background-image: url("/assets/qr-bg.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+}

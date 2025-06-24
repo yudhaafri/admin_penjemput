@@ -16,9 +16,8 @@ const useTappingHooks = (url = "ws://localhost:8081", retryDelay = 2000) => {
     };
 
     socket.onmessage = (event) => {
-      setUid(event.data);
-      console.log(event);
-      console.log("📥 UID:", event.data);
+      let data = JSON.parse(event.data);
+      setUid(data?.uid);
     };
 
     socket.onclose = () => {

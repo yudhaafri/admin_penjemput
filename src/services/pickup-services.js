@@ -1,6 +1,20 @@
 import axiosInstance from "src/app/interceptor";
 import service from "src/app/service";
 
+export const getQR = async (qrCode) => {
+  const { data } = await axiosInstance.get(
+    `https://api-gate.bpkpenaburjakarta.sch.id/api/assignment/mobile/scan`,
+    {
+      headers: {
+        Authorization: "",
+        "api-key-scan": "secure-scan-key-123",
+      },
+      params: { code: qrCode },
+    }
+  );
+  return data;
+};
+
 export const getAssigmentList = async (params, signal) => {
   const { data } = await axiosInstance.get(
     `https://api-gate.bpkpenaburjakarta.sch.id/api/assignment/mobile/list-assignment-admin`,
@@ -14,6 +28,5 @@ export const getAssigmentList = async (params, signal) => {
       },
     }
   );
-  console.log(data);
   return data;
 };
