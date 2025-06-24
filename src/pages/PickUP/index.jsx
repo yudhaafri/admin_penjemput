@@ -1,4 +1,4 @@
-import "./index.css";
+import "./style.css";
 import { Button } from "src/components";
 import usePickupStore from "./stores/pickup.z-store";
 import BarcodeSection from "./components/BarcodeSection";
