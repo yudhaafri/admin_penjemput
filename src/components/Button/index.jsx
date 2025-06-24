@@ -9,6 +9,17 @@ const Button = ({
   tooltip,
   ...props
 }) => {
+  const handleClick = () => {
+    // Lakukan sesuatu
+    props.onClick && props.onClick();
+
+    // Hilangkan fokus agar barcode scanner tidak men-trigger tombol lagi
+    setTimeout(() => {
+      document.activeElement instanceof HTMLElement &&
+        document.activeElement.blur();
+    }, 0);
+  };
+
   return (
     <>
       <button
@@ -23,6 +34,7 @@ const Button = ({
           "disabled:opacity-70 disabled:cursor-not-allowed [&>*]:disabled:cursor-not-allowed",
           ...className.split(" "),
         ])}
+        onClick={handleClick}
       >
         {children}
       </button>

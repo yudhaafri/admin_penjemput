@@ -51,7 +51,7 @@ const ProtectRoute = ({ layout = true, middleware, children }) => {
   }
 
   if (!token || !session) {
-    return <Navigate to="/authorize" state={{ from: location }} replace />;
+    // return <Navigate to="/authorize" state={{ from: location }} replace />;
   }
 
   if (user?.foundations?.length > 1) {

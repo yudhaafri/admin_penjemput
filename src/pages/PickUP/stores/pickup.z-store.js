@@ -1,16 +1,16 @@
 import { create } from "zustand";
 
 const initialState = {
-    dateSSPPayment:[new Date("01-01-2025"),new Date("04-01-2025")],
-    dateApprovedFinance:[new Date("01-01-2025"),new Date("04-01-2025")],
-    dateRegistrationPeriod:[new Date("01-01-2025"),new Date("04-01-2025")],
+  type: "barcode",
+  modal: false,
+  data: {},
 };
 
-const useDashboardStore = create((set) => ({
+const usePickupStore = create((set) => ({
   ...initialState,
-  setDateSSPPayment: (value) => set((state) => ({ ...state, dateSSPPayment: value })),
-  setDateApprovedFinance: (value) => set((state) => ({ ...state, dateApprovedFinance: value })),
-  setDateRegistrationPeriod: (value) => set((state) => ({ ...state, dateRegistrationPeriod: value })),
+  setType: (type) => set((state) => ({ ...state, type })),
+  setModal: (modal) => set((state) => ({ ...state, modal })),
+  setData: (data) => set((state) => ({ ...state, data })),
 }));
 
-export default useDashboardStore;
+export default usePickupStore;

@@ -55,3 +55,14 @@ export const useAnnualRegistrantQuery = (keys, options) => {
     ...options,
   });
 };
+
+export const useTestQuery = (keys, options) => {
+  return useQuery({
+    queryKey: keys,
+    queryFn: ({ signal, queryKey }) => {
+      const params = queryKey[1];
+      return DASHBOARD.getTest({ ...params }, signal);
+    },
+    ...options,
+  });
+};

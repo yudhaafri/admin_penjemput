@@ -3,7 +3,7 @@ import {
   useChooseFoundation,
   useGetAccessToken,
 } from "src/hooks/services/useAuth";
-import { useEmployeeQuery } from "src/hooks/services/useMasterData";
+// import { useEmployeeQuery } from "src/hooks/services/useMasterData";
 import useStore from "src/stores";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
@@ -11,33 +11,34 @@ import toast from "react-hot-toast";
 
 const useChooseInstitutionsHooks = () => {
   const navigate = useNavigate();
-  let { session, setToken, setUser, setRoles, setUserSchool, setPermissions } = useStore(
-    ({
-      session,
-      setToken,
-      setUser,
-      setUserSchool,
-      userSchool,
-      setRoles,
-      setPermissions,
-    }) => ({
-      session,
-      setToken,
-      setUser,
-      setUserSchool,
-      userSchool,
-      setRoles,
-      setPermissions,
-    }),
-  );
+  let { session, setToken, setUser, setRoles, setUserSchool, setPermissions } =
+    useStore(
+      ({
+        session,
+        setToken,
+        setUser,
+        setUserSchool,
+        userSchool,
+        setRoles,
+        setPermissions,
+      }) => ({
+        session,
+        setToken,
+        setUser,
+        setUserSchool,
+        userSchool,
+        setRoles,
+        setPermissions,
+      })
+    );
 
-  const { data: employee, error } = useEmployeeQuery();
+  // const { data: employee, error } = useEmployeeQuery();
   const chooseFoundation = useChooseFoundation();
   const getAccessToken = useGetAccessToken();
 
-  const schoolList = useMemo(() => {
-    return employee?.data?.schoolList;
-  }, [employee]);
+  // const schoolList = useMemo(() => {
+  //   return employee?.data?.schoolList;
+  // }, [employee]);
 
   useEffect(() => {
     if (error?.response?.status === 403) {
@@ -58,10 +59,9 @@ const useChooseInstitutionsHooks = () => {
       foundation: data.foundation,
     };
 
-    
     chooseFoundation.mutate(payload, {
       onSuccess: () => {
-      getAccessToken.mutate(
+        getAccessToken.mutate(
           { session_key: session, module: import.meta.env.VITE_MODULE_TYPE },
           {
             onSuccess: async (response) => {
@@ -77,15 +77,14 @@ const useChooseInstitutionsHooks = () => {
               //   ),
               // ];
 
-
               setToken(token);
               setUser(data);
-              setRoles(roles)
+              setRoles(roles);
               setUserSchool(data?.pickedFoundation);
               setPermissions(allPermissions);
               toast.success("Login Berhasil");
             },
-          },
+          }
         );
       },
     });

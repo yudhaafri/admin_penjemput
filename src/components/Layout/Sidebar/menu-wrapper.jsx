@@ -12,18 +12,18 @@ const MenuWrapper = ({ menu, level = 0 }) => {
   useEffect(() => {
     const doesPathMatch = (item) => {
       if (!item) return false;
-  
+
       if (item.path && location.pathname.startsWith(item.path)) {
         return true;
       }
-  
+
       if (item.childs) {
         return item.childs.some((child) => doesPathMatch(child));
       }
-  
+
       return false;
     };
-  
+
     const shouldBeOpen = doesPathMatch(menu) && !!menu.childs;
     setOpen(shouldBeOpen);
   }, [location.pathname, menu]);
@@ -42,9 +42,9 @@ const MenuWrapper = ({ menu, level = 0 }) => {
   return (
     <div className="space-y-1">
       <MenuItem menu={{ ...menu, level }} open={open} onOpen={setOpen} />
-      <CSSTransition in={open} timeout={200} classNames="menu-collapse" unmountOnExit>
-        <div className="pl-2">{childMenus}</div>
-      </CSSTransition>
+      {/* <CSSTransition in={open} timeout={200} classNames="menu-collapse" unmountOnExit> */}
+      <div className="pl-2">{childMenus}</div>
+      {/* </CSSTransition> */}
     </div>
   );
 };

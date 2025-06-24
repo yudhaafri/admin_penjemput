@@ -1,109 +1,61 @@
+import "./index.css";
+import { Button } from "src/components";
+import usePickupStore from "./stores/pickup.z-store";
+import BarcodeSection from "./components/BarcodeSection";
+import TappingSection from "./components/TappingSection";
+import { useNavigate } from "react-router-dom";
+
 const PickUp = () => {
-  // const { data, isLoading, isError } = useApprovalStatusQuery([
-  //   DASHBOARD_QUERY_KEY.APPROVAL_STATUS,
-  // ]);
+  const { type, setType } = usePickupStore();
+  const navigate = useNavigate();
 
   return (
-    // <div className="flex flex-col gap-3 md:gap-5">
-    //   {/* Top Cards */}
-    //   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-5">
-    //     <div className="bg-white p-3 rounded-xl flex gap-3 md:gap-5">
-    //       <div className="w-12 h-12 rounded-full bg-blue-500/10 text-primary-700 flex items-center justify-center text-xl">
-    //         <img src={DocumentVerified} />
-    //       </div>
-    //       <div className="flex flex-col">
-    //         <p className="text-sm text-slate-400">Anak Luar Lunas</p>
-    //         {isLoading ? (
-    //           <Spinner />
-    //         ) : isError ? (
-    //           <p>-</p>
-    //         ) : (
-    //           <p className="text-xl text-primary-700 font-bold">
-    //             {formatCurrency(data.data.paidOffOuterStudent, "decimal")}
-    //           </p>
-    //         )}
-    //       </div>
-    //     </div>
-    //     <div className="bg-white p-3 rounded-xl flex gap-3 md:gap-5">
-    //       <div className="w-12 h-12 rounded-full bg-blue-500/10 text-primary-700 flex items-center justify-center text-xl">
-    //         <img src={DocumentVerified2} />
-    //       </div>
-    //       <div className="flex flex-col">
-    //         <p className="text-sm text-slate-400">Anak Dalam Lunas</p>
-    //         {isLoading ? (
-    //           <Spinner />
-    //         ) : isError ? (
-    //           <p>-</p>
-    //         ) : (
-    //           <p className="text-xl text-primary-700 font-bold">
-    //             {formatCurrency(data.data.paidOffInnerStudent, "decimal")}
-    //           </p>
-    //         )}
-    //       </div>
-    //     </div>
-    //     <div className="bg-white p-3 rounded-xl flex gap-3 md:gap-5">
-    //       <div className="w-12 h-12 rounded-full bg-blue-500/10 text-primary-700 flex items-center justify-center text-xl">
-    //         <img src={DocumentWarning} />
-    //       </div>
-    //       <div className="flex flex-col">
-    //         <p className="text-sm text-slate-400">Data Belum Lengkap</p>
-    //         {isLoading ? (
-    //           <Spinner />
-    //         ) : isError ? (
-    //           <p>-</p>
-    //         ) : (
-    //           <p className="text-xl text-primary-700 font-bold">
-    //             {formatCurrency(data.data.incomplete, "decimal")}
-    //           </p>
-    //         )}
-    //       </div>
-    //     </div>
-    //     <div className="bg-white p-3 rounded-xl flex gap-3 md:gap-5">
-    //       <div className="w-12 h-12 rounded-full bg-blue-500/10 text-primary-700 flex items-center justify-center text-xl">
-    //         <img src={DocumentError} />
-    //       </div>
-    //       <div className="flex flex-col">
-    //         <p className="text-sm text-slate-400">Belum Diproses TU</p>
-    //         {isLoading ? (
-    //           <Spinner />
-    //         ) : isError ? (
-    //           <p>-</p>
-    //         ) : (
-    //           <p className="text-xl text-primary-700 font-bold">
-    //             {formatCurrency(data.data.needToBeCheckedbyTU, "decimal")}
-    //           </p>
-    //         )}
-    //       </div>
-    //     </div>
-    //     <div className="bg-white p-3 rounded-xl flex gap-3 md:gap-5">
-    //       <div className="w-12 h-12 rounded-full bg-blue-500/10 text-primary-700 flex items-center justify-center text-xl">
-    //         <img src={PrincipalAuthorized} />
-    //       </div>
-    //       <div className="flex flex-col">
-    //         <p className="text-sm text-slate-400">Sudah Otorisasi Kepsek</p>
-    //         {isLoading ? (
-    //           <Spinner />
-    //         ) : isError ? (
-    //           <p>-</p>
-    //         ) : (
-    //           <p className="text-xl text-primary-700 font-bold">
-    //             {formatCurrency(data.data.authorized, "decimal")}
-    //           </p>
-    //         )}
-    //       </div>
-    //     </div>
-    //   </div>
-    //   {/* Top Cards */}
-    //   <div className="grid grid-cols-3 gap-3 md:gap-5">
-    //     <SSPPaymentChart />
-    //     <ApprovedFinanceChart />
-    //   </div>
-    //   <div className="grid grid-cols-3 gap-3 md:gap-5">
-    //     <RegistrationPeriodChart />
-    //     <AnnualRegistrantChart />
-    //   </div>
-    // </div>
-    <div></div>
+    <div className="h-full bg-pickup-page flex flex-col items-center py">
+      <div className="my-auto flex flex-col items-center">
+        {type === "barcode" ? <BarcodeSection /> : <TappingSection />}
+        <div className="mt-3 flex gap-3">
+          {type === "barcode" ? (
+            <Button
+              type="button"
+              className="bg-primary-700 text-white px-6 py-2 rounded-md"
+              onClick={() => setType("qr")}
+            >
+              Tapping Card
+            </Button>
+          ) : (
+            <Button
+              type="button"
+              className="bg-primary-700 text-white px-6 py-2 rounded-md"
+              onClick={() => setType("barcode")}
+            >
+              Scan Barcode
+            </Button>
+          )}
+
+          <Button
+            type="button"
+            className="bg-primary-700 text-white px-6 py-2 rounded-md"
+            onClick={() => navigate("/pick-up-list")}
+          >
+            Daftar Penjemput
+          </Button>
+          <Button
+            type="button"
+            className="bg-primary-700 text-white px-6 py-2 rounded-md"
+            onClick={() => navigate("/class-list")}
+          >
+            Kelas Selesai
+          </Button>
+          <Button
+            type="button"
+            className="bg-primary-700 text-white px-6 py-2 rounded-md"
+            onClick={() => navigate("/class-done-list")}
+          >
+            List Kelas
+          </Button>
+        </div>
+      </div>
+    </div>
   );
 };
 

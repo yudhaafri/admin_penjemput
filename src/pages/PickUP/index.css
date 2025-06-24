@@ -1,0 +1,6 @@
+.bg-pickup-page {
+  height: 100%;
+  background-image: url("/assets/pickup-background.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+}

@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-body{
+body {
   background-color: #f9f9fb;
 }
 
@@ -39,41 +39,41 @@ div[class*="menu-dropdown"] {
   padding-left: 1.5em;
 }
 
-#dashboard-datepicker .react-datepicker{
+#dashboard-datepicker .react-datepicker {
   width: 100%;
-  border:none
+  border: none;
 }
 
-#dashboard-datepicker .react-datepicker__week{
+#dashboard-datepicker .react-datepicker__week {
   display: flex;
   justify-content: space-around;
 }
 
-#dashboard-datepicker .react-datepicker__header{
+#dashboard-datepicker .react-datepicker__header {
   background-color: white;
-  border:none
+  border: none;
 }
 
-#dashboard-datepicker .react-datepicker__day-names{
+#dashboard-datepicker .react-datepicker__day-names {
   display: flex;
   justify-content: space-around;
 }
 
-#dashboard-datepicker .react-datepicker__day-name{
+#dashboard-datepicker .react-datepicker__day-name {
   font-weight: bold;
-  color: #314F84;
+  color: #314f84;
 }
 
-#dashboard-datepicker .react-datepicker__month{
+#dashboard-datepicker .react-datepicker__month {
   margin: 0px !important;
-  padding:4px;
+  padding: 4px;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   width: 100%;
-  height: 100%
+  height: 100%;
 }
-#dashboard-datepicker .react-datepicker__month-container{
+#dashboard-datepicker .react-datepicker__month-container {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -82,4 +82,11 @@ div[class*="menu-dropdown"] {
 
 .payment-manual div[class*="menu-dropdown"] {
   z-index: 0 !important;
+}
+
+.bg-pickup-page {
+  height: 100%;
+  background-image: url("/assets/pickup-background.png");
+  background-repeat: no-repeat;
+  background-size: cover;
 }

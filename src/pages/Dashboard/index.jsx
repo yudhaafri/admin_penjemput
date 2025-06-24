@@ -1,123 +1,33 @@
-import DocumentError from "/assets/icon/document-error.svg";
-import DocumentVerified2 from "/assets/icon/document-verified-2.svg";
-import DocumentVerified from "/assets/icon/document-verified.svg";
-import DocumentWarning from "/assets/icon/document-warning.svg";
-import PrincipalAuthorized from "/assets/icon/principal-authorized.svg";
-import AnnualRegistrantChart from "./components/annual-registrant.chart";
-import ApprovedFinanceChart from "./components/approved-finance.chart";
-import RegistrationPeriodChart from "./components/registration-period.chart";
-import SSPPaymentChart from "./components/ssp-payment.chart";
-import { useApprovalStatusQuery } from "src/hooks/services/useDashboard";
-import { DASHBOARD_QUERY_KEY } from "./lib/dashboard.constants";
-import { Spinner } from "src/components";
-import { formatCurrency } from "src/helpers/utils";
+import { useState } from "react";
+import { useTestQuery } from "src/hooks/services/useDashboard";
 
 const Dashboard = () => {
-  const { data, isLoading, isError } = useApprovalStatusQuery([
-    DASHBOARD_QUERY_KEY.APPROVAL_STATUS,
-  ]);
+  const [params] = useState({
+    days: 7,
+    page: 1,
+    limit: 10,
+  });
+  // const { data, isLoading, isError } = useTestQuery(["test", params]);
 
   return (
-    // <div className="flex flex-col gap-3 md:gap-5">
-    //   {/* Top Cards */}
-    //   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-5">
-    //     <div className="bg-white p-3 rounded-xl flex gap-3 md:gap-5">
-    //       <div className="w-12 h-12 rounded-full bg-blue-500/10 text-primary-700 flex items-center justify-center text-xl">
-    //         <img src={DocumentVerified} />
-    //       </div>
-    //       <div className="flex flex-col">
-    //         <p className="text-sm text-slate-400">Anak Luar Lunas</p>
-    //         {isLoading ? (
-    //           <Spinner />
-    //         ) : isError ? (
-    //           <p>-</p>
-    //         ) : (
-    //           <p className="text-xl text-primary-700 font-bold">
-    //             {formatCurrency(data.data.paidOffOuterStudent, "decimal")}
-    //           </p>
-    //         )}
-    //       </div>
-    //     </div>
-    //     <div className="bg-white p-3 rounded-xl flex gap-3 md:gap-5">
-    //       <div className="w-12 h-12 rounded-full bg-blue-500/10 text-primary-700 flex items-center justify-center text-xl">
-    //         <img src={DocumentVerified2} />
-    //       </div>
-    //       <div className="flex flex-col">
-    //         <p className="text-sm text-slate-400">Anak Dalam Lunas</p>
-    //         {isLoading ? (
-    //           <Spinner />
-    //         ) : isError ? (
-    //           <p>-</p>
-    //         ) : (
-    //           <p className="text-xl text-primary-700 font-bold">
-    //             {formatCurrency(data.data.paidOffInnerStudent, "decimal")}
-    //           </p>
-    //         )}
-    //       </div>
-    //     </div>
-    //     <div className="bg-white p-3 rounded-xl flex gap-3 md:gap-5">
-    //       <div className="w-12 h-12 rounded-full bg-blue-500/10 text-primary-700 flex items-center justify-center text-xl">
-    //         <img src={DocumentWarning} />
-    //       </div>
-    //       <div className="flex flex-col">
-    //         <p className="text-sm text-slate-400">Data Belum Lengkap</p>
-    //         {isLoading ? (
-    //           <Spinner />
-    //         ) : isError ? (
-    //           <p>-</p>
-    //         ) : (
-    //           <p className="text-xl text-primary-700 font-bold">
-    //             {formatCurrency(data.data.incomplete, "decimal")}
-    //           </p>
-    //         )}
-    //       </div>
-    //     </div>
-    //     <div className="bg-white p-3 rounded-xl flex gap-3 md:gap-5">
-    //       <div className="w-12 h-12 rounded-full bg-blue-500/10 text-primary-700 flex items-center justify-center text-xl">
-    //         <img src={DocumentError} />
-    //       </div>
-    //       <div className="flex flex-col">
-    //         <p className="text-sm text-slate-400">Belum Diproses TU</p>
-    //         {isLoading ? (
-    //           <Spinner />
-    //         ) : isError ? (
-    //           <p>-</p>
-    //         ) : (
-    //           <p className="text-xl text-primary-700 font-bold">
-    //             {formatCurrency(data.data.needToBeCheckedbyTU, "decimal")}
-    //           </p>
-    //         )}
-    //       </div>
-    //     </div>
-    //     <div className="bg-white p-3 rounded-xl flex gap-3 md:gap-5">
-    //       <div className="w-12 h-12 rounded-full bg-blue-500/10 text-primary-700 flex items-center justify-center text-xl">
-    //         <img src={PrincipalAuthorized} />
-    //       </div>
-    //       <div className="flex flex-col">
-    //         <p className="text-sm text-slate-400">Sudah Otorisasi Kepsek</p>
-    //         {isLoading ? (
-    //           <Spinner />
-    //         ) : isError ? (
-    //           <p>-</p>
-    //         ) : (
-    //           <p className="text-xl text-primary-700 font-bold">
-    //             {formatCurrency(data.data.authorized, "decimal")}
-    //           </p>
-    //         )}
-    //       </div>
-    //     </div>
-    //   </div>
-    //   {/* Top Cards */}
-    //   <div className="grid grid-cols-3 gap-3 md:gap-5">
-    //     <SSPPaymentChart />
-    //     <ApprovedFinanceChart />
-    //   </div>
-    //   <div className="grid grid-cols-3 gap-3 md:gap-5">
-    //     <RegistrationPeriodChart />
-    //     <AnnualRegistrantChart />
-    //   </div>
-    // </div>
-    <div></div>
+    <div className="m-5">
+      <div className="text-[28px] mb-[30px] font-bold">Dashboard</div>
+      <div className="grid grid-cols-4 gap-4">
+        {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((item, index) => (
+          <div className="cursor-pointer flex flex-row shadow-[0_0_7.2px_0_rgba(0,0,0,0.1)] p-2 rounded-[5px]">
+            <img
+              className="bg-[#B0BDD4] px-[17px] py-[14px] rounded-[5px]"
+              src="/assets/icon/people.svg"
+              alt="people"
+            />
+            <div className="ms-[22px] flex flex-col justify-items-center my-auto">
+              <div className="text-sm font-extrabold">KBB-1</div>
+              <div className="text-sm  text-[#AEAEB3] font-bold">26</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 };
 

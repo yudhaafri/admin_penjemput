@@ -31,26 +31,29 @@ const Input = ({
           ...className.split(" "),
         ])}
       >
-        <div className="mr-2">{preffixIcon}</div>
+        {preffixIcon && <div className="mr-2">{preffixIcon}</div>}
         {textArea ? (
           <textarea
             {...props}
             placeholder={placeholder}
             className={classNames([
-              "outline-none py-2 w-full text-sm disabled:bg-transparent min-h-20",
+              "px-2 outline-none py-2 w-full text-sm disabled:bg-transparent min-h-20",
             ])}
           ></textarea>
         ) : (
           <input
             {...props}
             className={classNames([
-              "outline-none py-2 w-full text-sm disabled:bg-transparent",
-              { "file:bg-primary-500 file:text-white file:rounded-md file:p-1 file:text-xs cursor-pointer": props.type === "file"}
+              "px-2 outline-none py-2 w-full text-sm disabled:bg-transparent",
+              {
+                "file:bg-primary-500 file:text-white file:rounded-md file:p-1 file:text-xs cursor-pointer":
+                  props.type === "file",
+              },
             ])}
             placeholder={placeholder}
           />
         )}
-        <div className="mr-2">{suffixIcon}</div>
+        {suffixIcon && <div className="mr-2">{suffixIcon}</div>}
       </div>
     </div>
   );
