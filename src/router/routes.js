@@ -33,7 +33,7 @@ const routes = [
   {
     id: "pick-up-list",
     path: "/pick-up-list",
-    name: "PickUp",
+    name: "PickUpList",
     component: PickUpList,
     middleware: [],
   },
