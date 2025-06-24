@@ -1,7 +1,7 @@
 // Pages
 import ChooseInstitutions from "src/pages/ChooseInstitutions";
 import Dashboard from "src/pages/Dashboard";
-import PickUp from "src/pages/PickUp";
+import PickUp from "src/pages/PickUP";
 import PickUpList from "src/pages/PickUpList";
 import ClassDoneList from "src/pages/ClassDoneList";
 import ClassList from "src/pages/ClassList";
