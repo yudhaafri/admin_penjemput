@@ -15,3 +15,7 @@ export const usePickupQuery = (keys, options) => {
 export const qrMutation = () => {
   return useMutation(async (qrCode) => await PICKUP.getQR(qrCode));
 };
+
+export const cardMutation = () => {
+  return useMutation(async (uid) => await PICKUP.getCardDetail(uid));
+};
