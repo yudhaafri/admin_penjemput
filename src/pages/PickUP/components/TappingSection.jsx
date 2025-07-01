@@ -1,9 +1,34 @@
 import { Input } from "src/components";
 import BarcodeScannerImg from "/assets/barcode-scanner.png";
 import useTappingHooks from "../stores/pickup-tapping.hooks";
+import { useEffect, useState } from "react";
+import { cardMutation } from "src/hooks/services/usePickup";
+import PickupModal from "./PickupModal";
 
 const TappingSection = () => {
   const { uid, connected, setUid } = useTappingHooks();
+  const [modalData, setModalData] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const getCardDetail = cardMutation();
+  useEffect(() => {
+    if (uid) {
+      getCardDetail.mutate(uid, {
+        onSuccess: (response) => {
+          setModalData(response?.data);
+          setShowModal(true);
+
+          // Sembunyikan modal setelah beberapa detik (misal 3 detik)
+          setTimeout(() => {
+            setShowModal(false);
+            setUid("");
+          }, 3000);
+        },
+        onError: () => {
+          setUid("");
+        },
+      });
+    }
+  }, [uid]);
   return (
     <>
       <div className="relative">
@@ -22,6 +47,7 @@ const TappingSection = () => {
         value={uid}
         className="w-[535px] border-2 border-[#314F84]"
       />
+      <PickupModal data={modalData} isOpen={showModal} />
     </>
   );
 };

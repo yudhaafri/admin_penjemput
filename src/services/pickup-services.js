@@ -15,6 +15,21 @@ export const getQR = async (qrCode) => {
   return data;
 };
 
+export const getCardDetail = async (uid) => {
+  const { data } = await axiosInstance.get(
+    `https://api-gate.bpkpenaburjakarta.sch.id/api/assignment/mobile/external/` +
+      uid,
+    {
+      headers: {
+        Authorization: "",
+        "api-key-scan": "secure-scan-key-123",
+      },
+      // params: { code: qrCode },
+    }
+  );
+  return data;
+};
+
 export const getAssigmentList = async (params, signal) => {
   const { data } = await axiosInstance.get(
     `https://api-gate.bpkpenaburjakarta.sch.id/api/assignment/mobile/list-assignment-admin`,
