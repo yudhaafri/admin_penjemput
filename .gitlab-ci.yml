@@ -2,6 +2,7 @@ stages:
   - aws_login
   - preperation_env
   - build_docker
+  - deploy_development_aws
   - deploy_production_aws
 
 cache:
@@ -54,6 +55,7 @@ aws_login:
     - runner-build-docker-server-monitoring
   only:
     - production-aws
+    - development_aws
 
 preperation_env:
   stage: preperation_env
@@ -109,6 +111,34 @@ build_docker:
     - docker push $CI_REGISTRY_IMAGE_ECR:$IMAGE_TAG
   tags:
     - runner-build-docker-server-monitoring 
+
+deploy_development_aws:
+  stage: deploy_development_aws
+  image:
+    name: docker:19.03.12-dind
+  dependencies:
+    - aws_login
+    - preperation_env
+  script:
+    - echo $APP_NAME_DEV
+    - IMAGE_TAG="${APP_NAME_DEV}-${CI_COMMIT_SHORT_SHA}"
+    - echo $IMAGE_TAG
+    - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+    - docker pull $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+    - sed -i "s,_IMAGE:VERSION_,$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG," dev-docker-compose.yml
+    - scp -P ${PORT_DEV} dev-docker-compose.yml ${USER_DEV}@${HOST_DEV}:/home/shuttle/app/adminjemputan-fe
+    - |
+      docker_password=$(aws ecr get-login-password --region $AWS_DEFAULT_REGION)
+
+      ssh -p ${PORT_DEV} ${USER_DEV}@${HOST_DEV} <<EOF
+        echo "$docker_password" | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+        cd /home/shuttle/app/adminjemputan-fe
+        docker compose -f ev-docker-compose.yml up -d
+      EOF
+  only:
+    - development_aws
+  tags:
+    - runner-ssh-server-monitoring
 
 deploy_production_aws:
   stage: deploy_production_aws
