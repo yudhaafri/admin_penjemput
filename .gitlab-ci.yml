@@ -133,7 +133,7 @@ deploy_development_aws:
       ssh -p ${PORT_DEV} ${USER_DEV}@${HOST_DEV} <<EOF
         echo "$docker_password" | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
         cd /home/shuttle/app/adminjemputan-fe
-        docker compose -f ev-docker-compose.yml up -d
+        docker compose -f dev-docker-compose.yml up -d
       EOF
   only:
     - development-aws
