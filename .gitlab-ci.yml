@@ -55,7 +55,7 @@ aws_login:
     - runner-build-docker-server-monitoring
   only:
     - production-aws
-    - development_aws
+    - development-aws
 
 preperation_env:
   stage: preperation_env
