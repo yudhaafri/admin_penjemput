@@ -136,7 +136,7 @@ deploy_development_aws:
         docker compose -f ev-docker-compose.yml up -d
       EOF
   only:
-    - development_aws
+    - development-aws
   tags:
     - runner-ssh-server-monitoring
 
