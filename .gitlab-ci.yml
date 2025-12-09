@@ -1,0 +1,169 @@
+stages:
+  - aws_login
+  - preperation_env
+  - build_docker
+  - deploy_development_aws
+  - deploy_production_aws
+
+cache:
+  key: "$CI_COMMIT_SHORT_SHA"
+  untracked: true
+  paths:
+    - node_modules/
+
+aws_login:
+  stage: aws_login
+  image:
+    name: public.ecr.aws/aws-cli/aws-cli:2.13.28
+    entrypoint: [""]
+  before_script:
+    - yum install -y jq
+  id_tokens:
+    GITLAB_OIDC_TOKEN:
+      aud: https://gitlab.bpkpenaburjakarta.or.id/emveep_aji
+  script:
+    # Mengambil AWS kredensial sementara menggunakan OIDC token
+    - >
+      export $(printf "AWS_ACCESS_KEY_ID=%s AWS_SECRET_ACCESS_KEY=%s AWS_SESSION_TOKEN=%s"
+      $(aws sts assume-role-with-web-identity
+      --role-arn ${ROLE_ARN}
+      --role-session-name "GitLabRunner-${CI_PROJECT_ID}-${CI_PIPELINE_ID}"
+      --web-identity-token ${GITLAB_OIDC_TOKEN}
+      --duration-seconds 3600
+      --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]'
+      --output text))
+    # Menyimpan kredensial ke file .env untuk digunakan oleh stage lain
+    - echo "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID" > ${CI_PROJECT_DIR}/aws_credentials.env
+    - echo "AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY" >> ${CI_PROJECT_DIR}/aws_credentials.env
+    - echo "AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN" >> ${CI_PROJECT_DIR}/aws_credentials.env
+    - cat ${CI_PROJECT_DIR}/aws_credentials.env
+    # Mendapatkan password untuk autentikasi ke ECR
+    - |
+      AWS_PASSWORD=$(aws ecr get-login-password --region ${AWS_DEFAULT_REGION})
+      ENCODED_PASSWORD=$(echo -n "AWS:$AWS_PASSWORD" | base64 -w 0)
+      AUTH_PAYLOAD=$( jq --indent 0 -n --arg userpass "$ENCODED_PASSWORD" '{"auths": {"$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com": {"auth": $userpass}}}' )
+      echo "DOCKER_AUTH_CONFIG=${AUTH_PAYLOAD}" >> ${CI_PROJECT_DIR}/aws_credentials.env
+    # Memastikan file auth.env berisi kredensial yang benar
+    - cat ${CI_PROJECT_DIR}/aws_credentials.env
+    - echo $DOCKER_AUTH_CONFIG    
+  artifacts:
+    reports:
+      dotenv: ${CI_PROJECT_DIR}/aws_credentials.env  # Menyimpan file kredensial sebagai artifact
+    paths:
+      - ${CI_PROJECT_DIR}/aws_credentials.env
+  tags:
+    - runner-build-docker-server-monitoring
+  only:
+    - production-aws
+    - development-aws
+
+preperation_env:
+  stage: preperation_env
+  image: node:22
+  variables:
+    SOURCE_BRANCH: $ENV_DEVELOPMENT
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ /development-aws/
+      variables:
+        SOURCE_BRANCH: $ENV_DEVELOPMENT
+    - if: $CI_COMMIT_BRANCH =~ /production-aws/
+      variables:
+        SOURCE_BRANCH: $ENV_PRODUCTION
+  script:
+    - echo $SOURCE_BRANCH
+    - touch .env
+    - cp $SOURCE_BRANCH .env
+    - npm install
+    - npm run build
+    - ls -lah
+    - cat .env
+  tags:
+    - runner-build-docker-server-monitoring
+  artifacts:
+    paths:
+      - "dist"
+    expire_in: 1 days
+
+build_docker:
+  stage: build_docker
+  image: docker:stable
+  rules:
+    - if: $CI_COMMIT_BRANCH =~ /development-aws/
+      variables:
+        APP_NAME: $APP_NAME_DEV
+    - if: $CI_COMMIT_BRANCH =~ /production-aws/
+      variables:
+        APP_NAME: $APP_NAME_PROD
+  dependencies:
+    - aws_login
+    - preperation_env
+  services:
+    - name: docker:23-dind
+  before_script:
+    - apk add --no-cache jq
+    - mkdir -p ~/.docker
+  script:
+    - echo $APP_NAME
+    - IMAGE_TAG="${APP_NAME}-${CI_COMMIT_SHORT_SHA}"
+    - echo $IMAGE_TAG
+    - docker build -t $CI_REGISTRY_IMAGE_ECR:$IMAGE_TAG .
+    - echo $DOCKER_AUTH_CONFIG | jq -r '.' > ~/.docker/config.json
+    - docker push $CI_REGISTRY_IMAGE_ECR:$IMAGE_TAG
+  tags:
+    - runner-build-docker-server-monitoring 
+
+deploy_development_aws:
+  stage: deploy_development_aws
+  image:
+    name: docker:19.03.12-dind
+  dependencies:
+    - aws_login
+    - preperation_env
+  script:
+    - echo $APP_NAME_DEV
+    - IMAGE_TAG="${APP_NAME_DEV}-${CI_COMMIT_SHORT_SHA}"
+    - echo $IMAGE_TAG
+    - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+    - docker pull $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+    - sed -i "s,_IMAGE:VERSION_,$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG," dev-docker-compose.yml
+    - scp -P ${PORT_DEV} dev-docker-compose.yml ${USER_DEV}@${HOST_DEV}:/home/shuttle/app/adminjemputan-fe
+    - |
+      docker_password=$(aws ecr get-login-password --region $AWS_DEFAULT_REGION)
+
+      ssh -p ${PORT_DEV} ${USER_DEV}@${HOST_DEV} <<EOF
+        echo "$docker_password" | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+        cd /home/shuttle/app/adminjemputan-fe
+        docker compose -f dev-docker-compose.yml up -d
+      EOF
+  only:
+    - development-aws
+  tags:
+    - runner-ssh-server-monitoring
+
+deploy_production_aws:
+  stage: deploy_production_aws
+  image:
+    name: docker:19.03.12-dind
+  dependencies:
+    - aws_login
+    - preperation_env
+  script:
+    - echo $APP_NAME_PROD
+    - IMAGE_TAG="${APP_NAME_PROD}-${CI_COMMIT_SHORT_SHA}"
+    - echo $IMAGE_TAG
+    - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+    - docker pull $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
+    - sed -i "s,_IMAGE:VERSION_,$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG," docker-compose.yml
+    - scp -P ${PORT_PROD} docker-compose.yml ${USER_PROD}@${HOST_PROD}:/home/bpk-penabur/app/admin-jemputan-fe
+    - |
+      docker_password=$(aws ecr get-login-password --region $AWS_DEFAULT_REGION)
+
+      ssh -p ${PORT_PROD} ${USER_PROD}@${HOST_PROD} <<EOF
+        echo "$docker_password" | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+        cd /home/bpk-penabur/app/admin-jemputan-fe
+        docker compose up -d
+      EOF
+  only:
+    - production-aws
+  tags:
+    - runner-ssh-server-monitoring
