@@ -23,7 +23,7 @@ const BarcodeSection = () => {
           setTimeout(() => {
             setShowModal(false);
             setBarcode("");
-          }, 3000);
+          }, 10000);
         },
         onError: () => {
           setBarcode("");
@@ -50,7 +50,7 @@ const BarcodeSection = () => {
         value={barcode ?? ""}
         className="w-[535px] border-2 border-[#314F84]"
       />
-      <PickupModal data={modalData} isOpen={showModal} />
+      <PickupModal data={modalData} isOpen={showModal} handleClose={()=>setShowModal(false)} />
     </>
   );
 };

@@ -12,7 +12,7 @@ const Dashboard = () => {
   return (
     <div className="m-5">
       <div className="text-[28px] mb-[30px] font-bold">Dashboard</div>
-      <div className="grid grid-cols-4 gap-4">
+      {/* <div className="grid grid-cols-4 gap-4">
         {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((item, index) => (
           <div className="cursor-pointer flex flex-row shadow-[0_0_7.2px_0_rgba(0,0,0,0.1)] p-2 rounded-[5px]">
             <img
@@ -26,7 +26,7 @@ const Dashboard = () => {
             </div>
           </div>
         ))}
-      </div>
+      </div> */}
     </div>
   );
 };
