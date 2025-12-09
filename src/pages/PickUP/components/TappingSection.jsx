@@ -21,7 +21,7 @@ const TappingSection = () => {
           setTimeout(() => {
             setShowModal(false);
             setUid("");
-          }, 3000);
+          }, 10000);
         },
         onError: () => {
           setUid("");
@@ -47,7 +47,8 @@ const TappingSection = () => {
         value={uid}
         className="w-[535px] border-2 border-[#314F84]"
       />
-      <PickupModal data={modalData} isOpen={showModal} />
+      {!connected && <p>Tapping Card belum terkoneksi atau bridge belum dijalankan</p>}
+      <PickupModal data={modalData} isOpen={showModal} handleClose={()=>setShowModal(false)} />
     </>
   );
 };

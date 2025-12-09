@@ -55,7 +55,7 @@ const Header = () => {
         className="text-gray-500 transition-transform hover:cursor-pointer hover:scale-110"
       />
       {widthScreen <= SIDEBAR.MD && <Sidebar />}
-      <div className="flex justify-between items-center text-sm text-gray-600 gap-2">
+      {/* <div className="flex justify-between items-center text-sm text-gray-600 gap-2">
         <div className="flex items-center gap-1">
           <span>{user?.name ?? "-"} </span>
           <span className="font-medium">({roles?.toString() ?? "-"})</span>
@@ -68,7 +68,7 @@ const Header = () => {
           <FiLogOut />
           <div>Logout</div>
         </span>
-      </div>
+      </div> */}
     </div>
   );
 };
