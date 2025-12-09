@@ -8,7 +8,7 @@ const PickupModal = ({ isOpen, handleClose, data }) => {
     if (isOpen) {
       document.body.style.overflowY = "hidden";
     } else {
-      document.body.style.overflowY = "auto";
+      document.body.style.overflowY = "unset";
     }
   }, [isOpen]);
 
@@ -18,7 +18,7 @@ const PickupModal = ({ isOpen, handleClose, data }) => {
         className={`flex items-center justify-center fixed inset-0 w-screen h-screen bg-black/70 z-[25] transition-opacity duration-500 ${
           isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
-        onClick={handleClose}
+        onMouseDown={handleClose}
       >
         <div
           key="modal-confirmation"
