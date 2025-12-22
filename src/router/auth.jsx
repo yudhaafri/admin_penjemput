@@ -10,8 +10,8 @@ const AuthRoute = ({ children }) => {
 
   let location = useLocation();
 
-  const sessionCookie = Cookies.get("session");
-  const emailCookie = Cookies.get("email");
+  const sessionCookie = Cookies.get(import.meta.env.VITE_COOKIE_SESSION_NAME);
+  const emailCookie = Cookies.get(import.meta.env.VITE_COOKIE_EMAIL_NAME);
 
   if (!session || !sessionCookie || !emailCookie) {
     window.location.href = import.meta.env.VITE_IDENTITY_SERVER_URL;
