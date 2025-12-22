@@ -1,5 +1,5 @@
 // Auth
-import * as AUTH from "src/services/auth-services";
+import * as SCHOOL from "src/services/school-services"
 
 // Dashboard
 import * as DASHBOARD from "src/services/dashboard-services";
@@ -7,7 +7,7 @@ import * as PICKUP from "src/services/pickup-services";
 
 export {
   // -- Auth
-  AUTH,
+  SCHOOL,
   //  -- Dashboard
   DASHBOARD,
   PICKUP,

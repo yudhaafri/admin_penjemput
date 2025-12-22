@@ -3,7 +3,7 @@ import service from "src/app/service";
 
 export const getQR = async (qrCode) => {
   const { data } = await axiosInstance.get(
-    `https://api-gate.bpkpenaburjakarta.sch.id/api/assignment/mobile/scan`,
+    `${service.API}/assignment/mobile/scan`,
     {
       headers: {
         Authorization: "",
@@ -17,7 +17,7 @@ export const getQR = async (qrCode) => {
 
 export const getCardDetail = async (uid) => {
   const { data } = await axiosInstance.get(
-    `https://api-gate.bpkpenaburjakarta.sch.id/api/assignment/mobile/external/` +
+    `${service.API}/assignment/mobile/external/` +
       uid,
     {
       headers: {
@@ -32,7 +32,7 @@ export const getCardDetail = async (uid) => {
 
 export const getAssigmentList = async (params, signal) => {
   const { data } = await axiosInstance.get(
-    `https://api-gate.bpkpenaburjakarta.sch.id/api/assignment/mobile/list-assignment-admin`,
+    `${service.API}/assignment/mobile/list-assignment-admin`,
     {
       params,
       signal,

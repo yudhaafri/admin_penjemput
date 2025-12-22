@@ -5,44 +5,39 @@ import { Spinner } from "src/components";
 import useStore from "src/stores";
 
 const LoginCallback = () => {
-  const [jsonText, setJsonText] = useState("");
   const navigate = useNavigate();
-  const session_key = Cookies.get("session");
-  const email = Cookies.get("email");
+  const [emailInput, setEmailInput] = useState(
+    "yudha.afriansyah@kiranatama.com",
+  );
+  const [sessionInput, setSessionInput] = useState();
+  const session_key = Cookies.get(import.meta.env.VITE_COOKIE_SESSION_NAME);
+  const email = Cookies.get(import.meta.env.VITE_COOKIE_EMAIL_NAME);
 
-  const { setSession, reset } = useStore((state) => ({
+  const { setSession } = useStore((state) => ({
     setSession: state.setSession,
-    reset: state.reset,
   }));
 
   useEffect(() => {
-    if (import.meta.env.VITE_ENV !== "LOCAL") {
-      if (session_key && email) {
-        setSession(session_key);
-        navigate("/pilih-sekolah");
-      } else {
-        reset();
-        window.location.href = `${
-          import.meta.env.VITE_IDENTITY_SERVER_URL
-        }?redirectUri=${btoa(import.meta.env.VITE_BASE_URL)}`;
-      }
+    if (session_key && email) {
+      setSession(session_key);
+      navigate("/pilih-sekolah");
+    } else {
+      !import.meta.env.VITE_DEV && import.meta.env.VITE_ENV !== "LOCAL"
+        ? (window.location.href = `${import.meta.env.VITE_IDENTITY_SERVER_URL}?redirectUri=${btoa(import.meta.env.VITE_BASE_URL)}`)
+        : null;
     }
   }, []);
 
   const handleSave = () => {
     try {
-      const parsed = JSON.parse(jsonText);
-      const email = parsed.email;
-      const session = parsed.session;
-
-      if (!email || !session) {
+      if (!emailInput || !sessionInput) {
         console.log("❌ Email atau session tidak ditemukan di JSON.");
         return;
       }
 
-      Cookies.set("email", email);
-      Cookies.set("session", session);
-      setSession(session);
+      Cookies.set(import.meta.env.VITE_COOKIE_SESSION_NAME, sessionInput);
+      Cookies.set(import.meta.env.VITE_COOKIE_EMAIL_NAME, emailInput);
+      setSession(sessionInput);
       navigate("/pilih-sekolah");
     } catch (err) {
       console.log(err);
@@ -57,13 +52,20 @@ const LoginCallback = () => {
         </div>
       ) : (
         <div style={{ padding: "2rem", maxWidth: 600 }}>
-          <h2>🔐 Paste JSON dari Staging</h2>
-          <textarea
-            rows="10"
+          <h2>Email</h2>
+          <input
             style={{ width: "100%" }}
-            placeholder="Paste JSON here..."
-            value={jsonText}
-            onChange={(e) => setJsonText(e.target.value)}
+            placeholder="Paste Email here..."
+            value={emailInput}
+            onChange={(e) => setEmailInput(e.target.value)}
+          />
+          <h2>Session</h2>
+          <textarea
+            rows={10}
+            style={{ width: "100%" }}
+            placeholder="Paste Session here..."
+            value={sessionInput}
+            onChange={(e) => setSessionInput(e.target.value)}
           />
           <button onClick={handleSave} style={{ marginTop: "1rem" }}>
             Save to localStorage

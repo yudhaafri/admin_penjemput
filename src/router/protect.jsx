@@ -33,7 +33,7 @@ const ProtectRoute = ({ layout = true, middleware, children }) => {
     })
   );
 
-  let session = Cookies.get("session");
+  let session = Cookies.get(import.meta.env.VITE_COOKIE_SESSION_NAME);
 
   let location = useLocation();
 
@@ -51,7 +51,7 @@ const ProtectRoute = ({ layout = true, middleware, children }) => {
   }
 
   if (!token || !session) {
-    // return <Navigate to="/authorize" state={{ from: location }} replace />;
+    return <Navigate to="/authorize" state={{ from: location }} replace />;
   }
 
   if (user?.foundations?.length > 1) {

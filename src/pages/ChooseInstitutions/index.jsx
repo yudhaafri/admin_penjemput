@@ -1,14 +1,16 @@
-import { FormProvider, useForm } from "react-hook-form";
+import { Navigate } from "react-router-dom";
+import { FormProvider } from "react-hook-form";
+
 import { Button, SelectForm } from "src/components";
-import { CHOOSE_INSTITUTIONS_SCHEMA } from "./lib/choose-institutions.validator";
 import useChooseInstitutionsHooks from "./stores/choose-institutions.hooks";
 
 const ChooseInstitutions = () => {
-  const methods = useForm({
-    resolver: CHOOSE_INSTITUTIONS_SCHEMA,
-  });
+  const { userSchool, methods, handleSubmit, data, isFetching } =
+    useChooseInstitutionsHooks();
 
-  const { schoolList, handleSubmit } = useChooseInstitutionsHooks();
+  if (userSchool) {
+    return <Navigate to={"/"} />;
+  }
 
   return (
     <div className="w-[100vw] h-[100vh] flex items-center justify-center">
@@ -25,9 +27,13 @@ const ChooseInstitutions = () => {
               className="space-y-4"
             >
               <SelectForm
-                name={"foundation"}
-                options={schoolList}
-                getOptionLabel={(opt) => opt?.institution}
+                placeholder="Sekolah"
+                name={"school"}
+                options={data?.schoolList}
+                isLoading={isFetching}
+                menuPortalTarget={document.body}
+                getOptionLabel={({ institution }) => institution}
+                getOptionValue={({ id }) => id}
               />
 
               <div className="flex justify-center">

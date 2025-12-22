@@ -1,17 +1,17 @@
 import Cookies from "js-cookie";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Spinner } from "src/components";
-import { useLogout } from "src/hooks/services/useAuth";
 import useStore from "src/stores";
 
 const LogoutCallback = () => {
   const session_key = Cookies.get("session");
+  const navigate = useNavigate();
 
   const { reset } = useStore((state) => ({
     reset: state.reset,
   }));
 
-  const logout = useLogout();
 
   useEffect(() => {
     if (session_key) {
@@ -21,7 +21,11 @@ const LogoutCallback = () => {
           onSuccess: () => {
             reset();
             setTimeout(() => {
-              window.location.href = import.meta.env.VITE_IDENTITY_SERVER_URL;
+              if (import.meta.env.VITE_ENV !== "LOCAL") {
+                window.location.href = import.meta.env.VITE_IDENTITY_SERVER_URL;
+              } else {
+                navigate("/authorize");
+              }
             }, 1000);
           },
         }
@@ -30,7 +34,12 @@ const LogoutCallback = () => {
       return;
     }
 
-    window.location.href = import.meta.env.VITE_IDENTITY_SERVER_URL;
+    if (import.meta.env.VITE_ENV !== "LOCAL") {
+      window.location.href = import.meta.env.VITE_IDENTITY_SERVER_URL;
+    } else {
+      reset();
+      navigate("/authorize");
+    }
   }, []);
 
   return (

@@ -6,6 +6,7 @@ import { useWindowResize } from "src/hooks";
 import useStore, { useCoreStore } from "src/stores";
 import MenuWrapper from "./menu-wrapper";
 import { sidebarMenu } from "./sidebar-menu";
+import { useShallow } from "zustand/react/shallow";
 
 const Sidebar = () => {
   const { sidebarOpen, setSidebarOpen, sidebarCurrentOpen } = useCoreStore(
@@ -22,9 +23,11 @@ const Sidebar = () => {
     })
   );
 
-  let { user } = useStore(({ user }) => ({
-    user,
-  }));
+  let { user, roles, userSchool } = useStore(useShallow((state) => ({
+    user: state.user,
+    roles: state.roles,
+    userSchool: state.userSchool,
+  })));
 
   const [widthScreen] = useWindowResize(([width]) => {
     if (width <= SIDEBAR.MD) {
@@ -44,6 +47,36 @@ const Sidebar = () => {
     setSidebarOpen(open);
     // setSidebarCurrentOpen(open);
   };
+
+  function filterMenuTree(items, userRoles) {
+    return items
+      .map((item) => {
+        const hasOwnAccess =
+          !item.roles ||
+          item.roles.length === 0 ||
+          item.roles.some((role) => userRoles.includes(role));
+
+        const filteredChilds = item.childs
+          ? filterMenuTree(item.childs, userRoles)
+          : [];
+
+        const hasChildAccess = filteredChilds.length > 0;
+
+        // Show item if it has direct access or at least one child with access
+        if (hasOwnAccess || hasChildAccess) {
+          return {
+            ...item,
+            childs: hasChildAccess ? filteredChilds : undefined,
+          };
+        }
+
+        // No access — filter out
+        return null;
+      })
+      .filter(Boolean); // Remove nulls
+  }
+
+  const filteredSidebarMenu = filterMenuTree(sidebarMenu, roles);
 
   return (
     <>
@@ -84,7 +117,7 @@ const Sidebar = () => {
               <div className="text-center">
                 <div className="text-white mt-2">BPK PENABUR</div>
                 <div className="text-center font-bold mt-1 text-white text-lg">
-                  SMP BPK PENABUR
+                  {userSchool?.foundationName}
                 </div>
                 <div className="text-center font-bold mt-1 text-white font-italic">
                   Tahun Ajaran: {user?.activeClassYear?.name}
@@ -94,9 +127,9 @@ const Sidebar = () => {
           </div>
           <div className="p-2 space-y-1 overflow-auto h-[calc(100vh-200px)]">
             {/* Adjust height as needed */}
-            {map(sidebarMenu, (menu, key) => (
-              <MenuWrapper key={key} menu={menu} />
-            ))}
+            {map(filteredSidebarMenu, (menu, key) => {
+              return <MenuWrapper key={key} menu={menu} />;
+            })}
           </div>
         </aside>
       </div>
