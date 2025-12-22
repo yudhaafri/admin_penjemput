@@ -1,8 +1,0 @@
-version: '3'
-
-services:
-  bpk-admin-penabur-fe:
-        image: _IMAGE:VERSION_
-        restart: always
-        ports:
-           - "5184:80"

@@ -1,8 +1,0 @@
-**/.gitlab-ci.yml
-**/docker-compose*
-**/Dockerfile*
-**/.dockerignore
-**/.gitignore
-
-.gitlab-ci.yml.BACKUP
-README.md
