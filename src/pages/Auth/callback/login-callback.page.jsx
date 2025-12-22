@@ -12,7 +12,6 @@ const LoginCallback = () => {
   const [sessionInput, setSessionInput] = useState();
   const session_key = Cookies.get(import.meta.env.VITE_COOKIE_SESSION_NAME);
   const email = Cookies.get(import.meta.env.VITE_COOKIE_EMAIL_NAME);
-  console.log(session_key, email, import.meta.env.VITE_COOKIE_SESSION_NAME, import.meta.env.VITE_COOKIE_EMAIL_NAME)
 
   const { setSession } = useStore((state) => ({
     setSession: state.setSession,
