@@ -41,10 +41,11 @@ const PickUpTable = () => {
   const { data: list, isFetching } = usePickupQuery([
     PICK_UP_LIST_QUERY,
     {
-      days,
+      start_date: dayjs(new Date()).format("YYYY-MM-DD"),
+      end_date: dayjs(new Date()).format("YYYY-MM-DD"),
       page,
       limit,
-      class: search,
+      class_students: search,
       sortBy: sortBy ? sortBy + ":" + sortType : "",
       sortDirection: sortType ?? "DESC",
     },
@@ -119,18 +120,6 @@ const PickUpTable = () => {
           </div>
         ),
       },
-      {
-        id: "distance",
-        title: "Jarak",
-        dataIndex: "distance",
-        className: "w-1/8",
-        sortable: true,
-        sorter: (column, methods) => {
-          setSortBy(column);
-          setSortType(methods);
-        },
-        render: (value) => <div className="w-full">{value ?? "-"}</div>,
-      },
     ],
     [page, limit, list]
   );
@@ -154,11 +143,11 @@ const PickUpTable = () => {
       onChangePage={onChangePage}
       onChangeRowsPerPage={onChangeRowsPerPage}
       pagination={{
-        page: list?.meta?.currentPage,
-        limit: list?.meta?.itemsPerPage,
-        total: list?.meta?.totalItems,
-        prev_pages: !!list?.links?.previous,
-        next_pages: !!list?.links?.next,
+        page: list?.meta?.page,
+        limit: list?.meta?.limit,
+        total: list?.meta?.total,
+        // prev_pages: !!list?.links?.previous,
+        // next_pages: !!list?.links?.next,
       }}
     />
   );
