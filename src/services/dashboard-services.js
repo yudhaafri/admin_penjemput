@@ -3,7 +3,7 @@ import service from "src/app/service";
 
 export const getSSPPayment = async (params, signal) => {
   const { data } = await axiosInstance.get(
-    `${service.API}/dashboard/ssp-payment`,
+    `${service.API_BASE}/dashboard/ssp-payment`,
     {
       params,
       signal,
@@ -14,7 +14,7 @@ export const getSSPPayment = async (params, signal) => {
 
 export const getRegistrationPeriod = async (params, signal) => {
   const { data } = await axiosInstance.get(
-    `${service.API}/dashboard/registration-period`,
+    `${service.API_BASE}/dashboard/registration-period`,
     {
       params,
       signal,
@@ -25,7 +25,7 @@ export const getRegistrationPeriod = async (params, signal) => {
 
 export const getApprovedFinance = async (params, signal) => {
   const { data } = await axiosInstance.get(
-    `${service.API}/dashboard/approve-finance`,
+    `${service.API_BASE}/dashboard/approve-finance`,
     {
       params,
       signal,
@@ -36,7 +36,7 @@ export const getApprovedFinance = async (params, signal) => {
 
 export const getApprovalStatus = async (params, signal) => {
   const { data } = await axiosInstance.get(
-    `${service.API}/dashboard/approval-status`,
+    `${service.API_BASE}/dashboard/approval-status`,
     {
       params,
       signal,
@@ -47,7 +47,7 @@ export const getApprovalStatus = async (params, signal) => {
 
 export const getAnnualRegistrant = async (params, signal) => {
   const { data } = await axiosInstance.get(
-    `${service.API}/dashboard/annual-registrant`,
+    `${service.API_BASE}/dashboard/annual-registrant`,
     {
       params,
       signal,
