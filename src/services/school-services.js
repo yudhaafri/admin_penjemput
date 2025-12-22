@@ -7,7 +7,7 @@ import axios from "axios";
  * service for select-school-org dropdown
  */
 export const getSchoolOrganization = async (token, params, signal) => {
-  const { data } = await axios.get(`${service.API}/shuttle/web/auth/users/token`, {
+  const { data } = await axios.get(`${service.API_BASE}/shuttle/web/auth/users/token`, {
     params,
     signal,
     headers: {
@@ -20,7 +20,7 @@ export const getSchoolOrganization = async (token, params, signal) => {
 // NEW - SSO - choose first school after login from student admin
 export const patchSchoolOrganization = async (params) => {
   const { data } = await axiosInstance.post(
-    `${service.BE_IDENTITY_API}/auth/access-modules`,
+    `${service.API_IDENTITY}/auth/access-modules`,
     params,
   );
   return data;
@@ -29,7 +29,7 @@ export const patchSchoolOrganization = async (params) => {
 // Generate Access Token From SSO
 export const getAccessToken = async (payload) => {
   const { data } = await axiosInstance.post(
-    `${service.BE_IDENTITY_API}/auth/access-token-modules`,
+    `${service.API_IDENTITY}/auth/access-token-modules`,
     payload,
   );
 
