@@ -7,7 +7,7 @@ import axios from "axios";
  * service for select-school-org dropdown
  */
 export const getSchoolOrganization = async (token, params, signal) => {
-  const { data } = await axios.get(`${service.API_BASE}/shuttle/web/auth/users/token`, {
+  const { data } = await axiosInstance.get(`${service.API_BASE}/shuttle/web/auth/users/token`, {
     params,
     signal,
     headers: {

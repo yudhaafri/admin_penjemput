@@ -8,7 +8,6 @@ import routes from "./routes";
 import AuthRoute from "./auth";
 import ChooseInstitutions from "src/pages/ChooseInstitutions";
 import ModulePermissionNotFoundPage from "src/pages/Auth/guard/module-permission-not-found";
-import Login from "src/pages/Login";
 
 const App = () => {
   return (
@@ -25,14 +24,6 @@ const App = () => {
             </AuthRoute>
           }
         />
-        <Route
-          path="/login"
-          element={
-            <AuthRoute>
-              <Login />
-            </AuthRoute>
-          }
-        />
         {map(routes, (route, key) => {
           const { component: Component } = route;
           return (
@@ -43,6 +34,7 @@ const App = () => {
                 <ProtectRoute
                   middleware={route.middleware}
                   layout={route?.layout}
+                  fullHeight={route?.fullHeight}
                 >
                   <Component />
                 </ProtectRoute>

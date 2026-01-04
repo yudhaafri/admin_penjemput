@@ -68,7 +68,7 @@ const LoginCallback = () => {
             onChange={(e) => setSessionInput(e.target.value)}
           />
           <button onClick={handleSave} style={{ marginTop: "1rem" }}>
-            Save to localStorage
+            Login
           </button>
         </div>
       )}

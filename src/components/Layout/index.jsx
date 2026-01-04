@@ -1,8 +1,8 @@
 import { Sidebar, Header } from "src/components";
 
-const Layout = ({ children }) => {
+const Layout = ({ children, fullHeight = false }) => {
   return (
-    <div className="flex w-full h-screen">
+    <div className={`flex w-full ${fullHeight && "h-screen"}`}>
       <Sidebar />
       <div className="w-full overflow-hidden">
         <Header />

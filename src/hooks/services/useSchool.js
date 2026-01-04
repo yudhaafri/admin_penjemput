@@ -29,7 +29,6 @@ export const useSchoolOrgsQuery = (keys, options) => {
           Cookies.remove(import.meta.env.VITE_COOKIE_EMAIL_NAME, {
             domain: import.meta.env.VITE_SUB_DOMAIN,
           });
-          window.location.href = `${import.meta.env.VITE_IDENTITY_SERVER_URL}?redirectUri=${btoa(import.meta.env.VITE_BASE_URL)}`;
         }
         return [];
       }

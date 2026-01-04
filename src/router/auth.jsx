@@ -13,7 +13,10 @@ const AuthRoute = ({ children }) => {
   const sessionCookie = Cookies.get(import.meta.env.VITE_COOKIE_SESSION_NAME);
   const emailCookie = Cookies.get(import.meta.env.VITE_COOKIE_EMAIL_NAME);
 
-  if (!session || !sessionCookie || !emailCookie) {
+  if (
+    (!session || !sessionCookie || !emailCookie) &&
+    import.meta.env.VITE_ENV !== "LOCAL"
+  ) {
     window.location.href = import.meta.env.VITE_IDENTITY_SERVER_URL;
   }
 

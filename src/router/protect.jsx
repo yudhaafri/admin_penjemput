@@ -23,7 +23,7 @@ const hasPermission = (permissions, middleware) => {
   });
 };
 
-const ProtectRoute = ({ layout = true, middleware, children }) => {
+const ProtectRoute = ({ layout = true, middleware, children, fullHeight }) => {
   let { token, user, permissions } = useStore(
     ({ token, user, userSchool, permissions }) => ({
       token,
@@ -59,7 +59,7 @@ const ProtectRoute = ({ layout = true, middleware, children }) => {
   }
 
   if (layout) {
-    return <Layout>{children}</Layout>;
+    return <Layout fullHeight={fullHeight}>{children}</Layout>;
   }
 
   return children;

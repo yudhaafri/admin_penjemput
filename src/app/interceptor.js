@@ -92,32 +92,29 @@ const errorInterceptor = (error) => {
     setUser(null);
     window.location.href = "/authorize";
   }
-  if (
-    error?.response?.data?.message.includes("session not found") ||
-    error?.response?.data?.message.includes("Session data user not found")
-  ) {
-    setToken(null);
-    setUser(null);
-    Cookies.remove("session", {
-      domain: import.meta.env.VITE_SUB_DOMAIN,
-    });
-    Cookies.remove("email", {
-      domain: import.meta.env.VITE_SUB_DOMAIN,
-    });
-    window.location.href = import.meta.env.VITE_IDENTITY_SERVER_URL;
+  if (!error?.response?.data?.message?.data) {
+    if (
+      error?.response?.data?.message.includes("session not found") ||
+      error?.response?.data?.message.includes("Session data user not found") ||
+      error?.response?.data?.message.includes("jwt expired") ||
+      error?.response?.data?.message.includes("Invalid token") ||
+      error?.response?.data?.message.includes("destroy") ||
+      error?.response?.data?.message.includes("JsonWebTokenError")
+    ) {
+      setToken(null);
+      setUser(null);
+      Cookies.remove(import.meta.env.VITE_COOKIE_SESSION_NAME, {
+        domain: import.meta.env.VITE_SUB_DOMAIN,
+      });
+      Cookies.remove(import.meta.env.VITE_COOKIE_EMAIL_NAME, {
+        domain: import.meta.env.VITE_SUB_DOMAIN,
+      });
+    }
   }
 
   if (axios.isCancel(error)) {
     return;
   }
-
-  // Check if error from detail paymeny inquiry then doesnt need to throw toast
-  const isErrorDetailPaymentInquiry = error?.config?.url.includes(
-    "/inquiry/detail-payment"
-  );
-
-  if (!isErrorDetailPaymentInquiry) toast.error(generateErrorMessage(error));
-
   return Promise.reject(error);
 };
 
