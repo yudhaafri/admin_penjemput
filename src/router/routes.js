@@ -4,6 +4,8 @@ import Dashboard from "src/pages/Dashboard";
 import PickUp from "src/pages/PickUp";
 import PickUpList from "src/pages/PickUpList";
 import ShuttleHistory from "src/pages/ShuttleHistory";
+import ShuttleCard from "src/pages/ShuttleCard";
+import DetailShuttleCard from "src/pages/ShuttleCard/parts/DetailShuttleCard";
 
 // Routes
 
@@ -28,6 +30,7 @@ const routes = [
     name: "PickUp",
     component: PickUp,
     middleware: [],
+    fullHeight: true,
   },
   {
     id: "pick-up-list",
@@ -36,8 +39,27 @@ const routes = [
     component: PickUpList,
     middleware: [],
   },
-  
-  
+  {
+    id: "shuttle-card",
+    path: "/shuttle-card",
+    name: "ShuttleCard",
+    component: ShuttleCard,
+    middleware: [],
+  },
+  {
+    id: "detail-shuttle-card",
+    path: "/shuttle-card/detail/:id",
+    name: "DetailShuttleCard",
+    component: DetailShuttleCard,
+    middleware: [],
+  },
+  {
+    id: "shuttle-hisory",
+    path: "/shuttle-history",
+    name: "ShuttleHistory",
+    component: ShuttleHistory,
+    middleware: [],
+  },
 ];
 
 export default routes;

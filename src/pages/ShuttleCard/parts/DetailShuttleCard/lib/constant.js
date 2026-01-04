@@ -1,0 +1,1 @@
+export const DETAIL_STUDENT_LIST_QUERY = "detail-student-query";  
