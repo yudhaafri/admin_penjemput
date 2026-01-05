@@ -6,7 +6,7 @@ import useShuttleHistoryHooks from "./stores/hooks";
 import { InputForm } from "src/components";
 import { MdSearch } from "react-icons/md";
 import useShuttleHistoryStore from "./stores/store";
-import { exportStudentsMutation } from "src/hooks/services/usePickup";
+import { exportAssigmentMutation } from "src/hooks/services/usePickup";
 import toast from "react-hot-toast";
 
 const ShuttleHistory = () => {
@@ -15,7 +15,7 @@ const ShuttleHistory = () => {
 
   const { handleSearch } = useShuttleHistoryHooks();
 
-  const getExport = exportStudentsMutation();
+  const getExport = exportAssigmentMutation();
 
   const { page, limit, search, searchClass, sortBy, sortType } =
     useShuttleHistoryStore((state) => ({

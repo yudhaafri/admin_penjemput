@@ -59,8 +59,9 @@ export const addCardMutation = () => {
   );
 };
 
-export const exportStudentsMutation = () => {
+export const exportAssigmentMutation = () => {
   return useMutation(
     async (params) => await PICKUP.getExportAssigmentList(params)
   );
 };
+
