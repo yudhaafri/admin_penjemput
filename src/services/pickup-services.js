@@ -37,6 +37,16 @@ export const getAssigmentList = async (params, signal) => {
   return data;
 };
 
+export const getAssigmentDetail = async (id, signal) => {
+  const { data } = await axiosInstance.get(
+    `${service.API_BASE}/assignment/mobile/list-assignment-admin/${id}`,
+    {
+      signal,
+    }
+  );
+  return data;
+};
+
 export const getStudentList = async (params, signal) => {
   const { data } = await axiosInstance.get(
     `${service.API_BASE}/shuttle/web/student`,

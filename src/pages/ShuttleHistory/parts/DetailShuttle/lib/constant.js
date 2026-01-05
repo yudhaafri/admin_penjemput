@@ -1,0 +1,1 @@
+export const DETAIL_SHUTTLE_QUERY = "detail-shuttle-query";  

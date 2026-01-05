@@ -6,6 +6,7 @@ import PickUpList from "src/pages/PickUpList";
 import ShuttleHistory from "src/pages/ShuttleHistory";
 import ShuttleCard from "src/pages/ShuttleCard";
 import DetailShuttleCard from "src/pages/ShuttleCard/parts/DetailShuttleCard";
+import DetailShuttle from "src/pages/ShuttleHistory/parts/DetailShuttle";
 
 // Routes
 
@@ -58,6 +59,13 @@ const routes = [
     path: "/shuttle-history",
     name: "ShuttleHistory",
     component: ShuttleHistory,
+    middleware: [],
+  },
+  {
+    id: "detail-shuttl",
+    path: "/shuttle-history/detail/:id",
+    name: "DetailShuttle",
+    component: DetailShuttle,
     middleware: [],
   },
 ];
