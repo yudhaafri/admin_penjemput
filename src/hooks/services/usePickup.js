@@ -65,3 +65,9 @@ export const exportAssigmentMutation = () => {
   );
 };
 
+export const exportStudentsMutation = () => {
+  return useMutation(
+    async (params) => await PICKUP.getExportStudentList(params)
+  );
+};
+

@@ -2,15 +2,21 @@ import { debounce } from "lodash";
 import useShuttleCardStore from "./store";
 
 const useShuttleHistoryHooks = () => {
-  const { setPage, setLimit, setSearch,setSearchClass, visibleColumns, setVisibleColumns } =
-    useShuttleCardStore((state) => ({
-      setPage: state.setPage,
-      setLimit: state.setLimit,
-      setSearch: state.setSearch,
-      setSearchClass: state.setSearchClass,
-      visibleColumns: state.visibleColumns,
-      setVisibleColumns: state.setVisibleColumns,
-    }));
+  const {
+    setPage,
+    setLimit,
+    setSearch,
+    setSearchClass,
+    visibleColumns,
+    setVisibleColumns,
+  } = useShuttleCardStore((state) => ({
+    setPage: state.setPage,
+    setLimit: state.setLimit,
+    setSearch: state.setSearch,
+    setSearchClass: state.setSearchClass,
+    visibleColumns: state.visibleColumns,
+    setVisibleColumns: state.setVisibleColumns,
+  }));
 
   const onChangePage = (page) => {
     setPage(page);
@@ -24,7 +30,7 @@ const useShuttleHistoryHooks = () => {
     setSearch(keyword);
   }, 500);
 
-   const handleSearchClass = debounce((keyword) => {
+  const handleSearchClass = debounce((keyword) => {
     setSearchClass(keyword);
   }, 500);
 

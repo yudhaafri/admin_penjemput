@@ -8,7 +8,7 @@ import dayjs from "dayjs";
 import { STUDENT_LIST_QUERY } from "../lib/constants";
 import { useNavigate } from "react-router-dom";
 
-const ShuttleHistoryTable = () => {
+const ShuttleCardTable = () => {
   const methods = useFormContext();
   const navigate = useNavigate();
 
@@ -157,4 +157,4 @@ const ShuttleHistoryTable = () => {
   );
 };
 
-export default ShuttleHistoryTable;
+export default ShuttleCardTable;

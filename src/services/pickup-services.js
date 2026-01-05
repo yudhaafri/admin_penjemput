@@ -78,3 +78,14 @@ export const getExportAssigmentList= async (params, signal) => {
   );
   return data;
 };
+
+export const getExportStudentList= async (params, signal) => {
+  const { data } = await axiosInstance.get(
+    `${service.API_BASE}/shuttle/web/student/export`,
+    {
+      params,
+      signal,
+    }
+  );
+  return data;
+};
