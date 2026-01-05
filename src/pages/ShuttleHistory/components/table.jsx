@@ -137,7 +137,7 @@ const ShuttleHistoryTable = () => {
           <div className="flex items-center justify-center space-x-2">
             <Button
               className="border border-[#65B741] text-[#65B741] bg-rounded text-primary-500"
-              // onClick={() => navigate(`./detail/${data?.id}`)}
+              onClick={() => navigate(`./detail/${data?.id}`)}
             >
               Detail
             </Button>

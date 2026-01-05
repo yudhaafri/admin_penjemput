@@ -5,6 +5,7 @@ const authStore = (set) => ({
   permissions: null,
   roles: null,
   session: null,
+  level: null,
   setToken: (token) => {
     set((state) => ({
       ...state,
@@ -41,6 +42,12 @@ const authStore = (set) => ({
       session,
     }));
   },
+  setLevel: (level) => {
+    set((state) => ({
+      ...state,
+      level,
+    }));
+  },
   reset: () => {
     set(() => ({
       token: null,
@@ -48,8 +55,9 @@ const authStore = (set) => ({
       userSchool: null,
       permissions: null,
       session: null,
-    }))
-  }
+      level: null,
+    }));
+  },
 });
 
 export default authStore;

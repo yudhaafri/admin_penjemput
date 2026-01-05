@@ -12,13 +12,15 @@ import CHOOSE_INSTITUTIONS_SCHEMA from "../lib/choose-institutions.validator";
 import { jwtDecode } from "jwt-decode";
 
 const useChooseInstitutionsHooks = () => {
-  let { setToken, setUser, setUserSchool, session, setRoles } = useStore((state) => ({
-    setToken: state.setToken,
-    setUser: state.setUser,
-    setUserSchool: state.setUserSchool,
-    session: state.session,
-    setRoles: state.setRoles
-  }));
+  let { setToken, setUser, setUserSchool, session, setRoles, setLevel } =
+    useStore((state) => ({
+      setToken: state.setToken,
+      setUser: state.setUser,
+      setUserSchool: state.setUserSchool,
+      session: state.session,
+      setRoles: state.setRoles,
+      setLevel: state.setLevel,
+    }));
 
   const { data, isFetching } = useSchoolOrgsQuery();
   const post = useSchoolOrgChoose();
@@ -52,13 +54,14 @@ const useChooseInstitutionsHooks = () => {
               onSuccess: (response) => {
                 const token = response?.data?.data?.token ?? null;
                 const roles = response?.data?.data?.roles ?? null;
-                let user = response?.data?.data;               
+                let user = response?.data?.data;
                 delete user.token;
                 const userData = jwtDecode(token);
                 setToken(token);
-                setRoles(roles)
+                setRoles(roles);
                 setUser(user);
                 setUserSchool(userData?.pickedFoundation);
+                setLevel(payload?.school?.levelName);
                 toast.success(response?.data?.message);
               },
             }

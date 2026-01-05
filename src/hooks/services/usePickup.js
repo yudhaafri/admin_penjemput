@@ -12,6 +12,17 @@ export const usePickupQuery = (keys, options) => {
   });
 };
 
+export const usePickupDetailQuery = (keys, options) => {
+  return useQuery({
+    queryKey: keys,
+    queryFn: ({ signal, queryKey }) => {
+      const id = queryKey[1];
+      return PICKUP.getAssigmentDetail(id, signal);
+    },
+    ...options,
+  });
+};
+
 export const useStudentQuery = (keys, options) => {
   return useQuery({
     queryKey: keys,
@@ -43,5 +54,7 @@ export const cardMutation = () => {
 };
 
 export const addCardMutation = () => {
-  return useMutation(async ({id, payload}) => await PICKUP.patchCardShuttel(id, payload));
+  return useMutation(
+    async ({ id, payload }) => await PICKUP.patchCardShuttel(id, payload)
+  );
 };

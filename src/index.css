@@ -90,3 +90,43 @@ div[class*="menu-dropdown"] {
   background-repeat: no-repeat;
   background-size: cover;
 }
+
+/* NFC CARD SIZE */
+.nfc-card {
+  width: 85.6mm;
+  height: 54mm;
+
+  &.bg-sd {
+    background-image: url("/assets/bg-sd.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  &.bg-tk {
+    background-image: url("/assets/bg-tk.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+}
+
+/* PRINT MODE */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  .nfc-card,
+  .nfc-card * {
+    visibility: visible;
+  }
+
+  .nfc-card {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  @page {
+    size: 85.6mm 54mm;
+    margin: 0;
+  }
+}

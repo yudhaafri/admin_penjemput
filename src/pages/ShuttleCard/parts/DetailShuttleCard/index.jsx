@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import useDetailShuttleCardHooks from "./stores/hooks";
 import { Button, Input } from "src/components";
@@ -6,10 +6,17 @@ import ScanModal from "./components/ScanModal";
 import { addCardMutation } from "src/hooks/services/usePickup";
 import { useParams } from "react-router-dom";
 import useTappingHooks from "./stores/pickup-tapping.hooks";
+import Breadcrumbs from "src/components/Breadcrumbs";
+import NfcCardPrint from "./components/NfcCardPrint";
+import { useReactToPrint } from "react-to-print";
 
 const DetailShuttleCard = () => {
   const methods = useForm();
   const { id } = useParams();
+  const breadcrumbItems = [
+    { label: "Data Siswa", path: "/shuttle-card" },
+    { label: "Lihat Profil" },
+  ];
 
   const [showModal, setShowModal] = useState(false);
   const [typeCard, setTypeCard] = useState("");
@@ -21,6 +28,10 @@ const DetailShuttleCard = () => {
   const ScanCardHandle = (type) => {
     setShowModal(true), setTypeCard(type);
   };
+
+  const contentRef = useRef(null);
+
+  const handlePrint = useReactToPrint({ contentRef });
 
   useEffect(() => {
     if (uid && !typeCard) {
@@ -49,8 +60,9 @@ const DetailShuttleCard = () => {
 
   return (
     <FormProvider {...methods}>
-      <div className="pt-[26px] pb-[17px] w-[90%] mx-[53px] my-auto">
-        <div className="text-[28px] font-bold">Lihat Profil</div>
+      <div className="flex flex-row items-center justify-between pt-[26px] pb-[17px] w-[90%] mx-[53px] my-auto">
+        <div className="text-[28px] font-bold">Details</div>
+        <Breadcrumbs items={breadcrumbItems} />
       </div>
       <div className="grid grid-cols-2 gap-3 w-[90%] mx-[53px]">
         <div className="flex flex-col gap-4">
@@ -157,12 +169,14 @@ const DetailShuttleCard = () => {
               <Button
                 type="button"
                 className="mt-2 text-primary-700 w-full rounded-[10px] text-md font-bold border border-primary-700 bg-white hover:bg-primary-700 hover:text-white hover:border-primatext-primary-700 flex-1 py-2 space-x-1"
+                onClick={handlePrint}
               >
                 <span>Cetak Kartu</span>
               </Button>
             </div>
           </div>
         </div>
+        <NfcCardPrint ref={contentRef} student={student} levelName="SD" />
       </div>
       <ScanModal
         isOpen={showModal}
