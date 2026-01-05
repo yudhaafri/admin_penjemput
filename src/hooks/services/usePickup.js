@@ -58,3 +58,9 @@ export const addCardMutation = () => {
     async ({ id, payload }) => await PICKUP.patchCardShuttel(id, payload)
   );
 };
+
+export const exportStudentsMutation = () => {
+  return useMutation(
+    async (params) => await PICKUP.getExportAssigmentList(params)
+  );
+};

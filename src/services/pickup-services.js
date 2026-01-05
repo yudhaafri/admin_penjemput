@@ -67,3 +67,14 @@ export const getStudentDetail = async (id, signal) => {
   );
   return data?.data;
 };
+
+export const getExportAssigmentList= async (params, signal) => {
+  const { data } = await axiosInstance.get(
+    `${service.API_BASE}/assignment/mobile/list-assignment-admin/export-student`,
+    {
+      params,
+      signal,
+    }
+  );
+  return data;
+};
