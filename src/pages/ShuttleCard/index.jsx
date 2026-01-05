@@ -13,7 +13,7 @@ const ShuttleCard = () => {
   return (
     <FormProvider {...methods}>
       <div className="pt-[26px] pb-[17px] w-[90%] mx-[53px] my-auto">
-        <div className="text-[28px] font-bold">Riwayan Penjemputan</div>
+        <div className="text-[28px] font-bold">Data Siswa</div>
       </div>
       <div className="py-[18px] px-[44px] rounded-[5px] bg-white w-[90%] mx-[53px] my-auto">
         <div className="flex justify-between gap-3 pb-3">
